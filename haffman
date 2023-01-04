@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <list>
+#include <fstream>
+using namespace std;
+
+class Node
+{
+	public:
+	 int freq;
+	 char sim;
+	 Node *left, *right;
+	 
+	 Node(){left=right=NULL;}
+
+	 Node(Node *L, Node *R) 
+	 {  left =  L;
+	    right = R;
+	    freq = L->freq + R->freq;  }
+};
+
+
+struct MC
+{
+    bool operator()(const Node* l, const Node* r) const { return l->freq < r->freq; }
+};
+
+
+vector<bool> code;                
+map<char,vector<bool> > tree;
