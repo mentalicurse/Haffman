@@ -8,18 +8,18 @@
 
 using namespace std;
 
-class Node
+class Node		//класс Узел
 {
 	public:
 	string key;
 	int freq;
 	Node *left, *right;
 	 
-bool operator () (const Node & x, const Node & y)
+bool operator () (const Node & x, const Node & y) //функция для упорядочения кучи
   {
 	return x.freq >= y.freq;
   }
-Node (const string& str = "", int count = 0, Node * L = NULL, Node * R = NULL)
+Node (const string& str = "", int count = 0, Node * L = NULL, Node * R = NULL) //построение узла
   {
 	key = str;
 	freq = count;
@@ -27,12 +27,13 @@ Node (const string& str = "", int count = 0, Node * L = NULL, Node * R = NULL)
 	right = R;
   }
   
-Node *join (Node x)
+Node *Unit (Node x)		//объединение узлов в один
   {
 	return new Node (x.key + key, x.freq + freq, new Node (x), this);
   }
 };
 
+//кодирование символов
 void CodingHuffman (Node * root, string code, unordered_map < string, string > *codetable)
 {
   if (root == nullptr)
@@ -45,22 +46,22 @@ void CodingHuffman (Node * root, string code, unordered_map < string, string > *
    if (root->left==NULL && root->right==NULL)   (*codetable)[root->key] = code;
 }
 
-
+//построение дерева
 Node *BuildTree (priority_queue < Node, vector < Node >, Node > htree)
 {
   while (htree.size () > 1)
     {
       Node *t = new Node (htree.top ());
       htree.pop ();
-      htree.push (*t->join (*new Node (htree.top ())));
+      htree.push (*t->Unit (*new Node (htree.top ())));
       htree.pop ();
     }
   return new Node (htree.top ());
 }
 
-void HUFFMAN ()
+void HUFFMAN () //функция кодирования
 {
-  int *ABC = new int[256];
+  int *ABC = new int[256];  //массив символов
   for (int i = 0; i < 256; i++)
     {
       ABC[i] = 0;
@@ -73,7 +74,7 @@ void HUFFMAN ()
     }
 
   unsigned char c = 0;
-  while (!feof (input))
+  while (!feof (input)) //считывание символов и их частот, занесение в массив
     {
       c = fgetc (input);
       if (!feof (input))
@@ -83,29 +84,29 @@ void HUFFMAN ()
     }
 
   fclose (input);
-cout<<"Частота:"<<endl;
+cout<<"Частота:"<<endl;		
   priority_queue < Node, vector < Node >, Node > htree;
-  for (int i = 0; i < 256; i++)
+  for (int i = 0; i < 256; i++)	//занесение в очередь
     {	
       if (ABC[i] != 0)
 	{
 	  string s (1, static_cast < char >(i));
 
 	  Node newhtree (s, ABC[i]);
-	  cout << s << " := " << newhtree.freq << endl;
+	  cout << s << " := " << newhtree.freq << endl; //вывод символов и частот на экран
 	  htree.push (newhtree);
 	}
     }
 
-  Node *Tree = BuildTree (htree);
+  Node *Tree = BuildTree (htree); //построение дерева
   unordered_map < string, string > codetable;
-  CodingHuffman (Tree, "", &codetable);
+  CodingHuffman (Tree, "", &codetable);//символы и их кодировки
 	
 unordered_map < string, string >::iterator it;
   cout << "Кодировка : " << endl;
     for(it=codetable.begin();it!=codetable.end();it++)
     {
-      cout << it->first << " || " << it->second << endl;
+      cout << it->first << " || " << it->second << endl;//вывод символа и его кодировки
     }
   c = 0;
   unsigned char k = 0;
@@ -113,11 +114,22 @@ unordered_map < string, string >::iterator it;
   input = fopen ("input.txt", "r");
 	
   unsigned int length = 0;
-
-  unsigned int bit_length = 0;
   unsigned char simvol = 0;
+  unsigned int bit_length = 0;
 
-  while (!feof (input))
+  char count_simvol = htree.size();
+  fputc(count_simvol, output);//вносим в файл количество символов
+    
+    for (int i = 0; i < 256; i++)
+    {
+        if (ABC[i] != 0)
+        {
+            fputc(static_cast<char>(i), output); 	//вносим символ
+            fwrite(reinterpret_cast<const char*>(&ABC[i]), sizeof(long int), 1, output); //и их частоту
+        }
+    }
+	
+  while (!feof (input))//сжатие файла и запись закодированного текста
     {			
       c = fgetc (input);
       if (!feof (input))
@@ -193,14 +205,14 @@ unordered_map < string, string >::iterator it;
 	}
     }
 
-  fclose (input);
-  fclose (output);	
+  fclose (input); //закрытие
+  fclose (output);//файлов	
  
 }
 
 
 int main ()
 {
-HUFFMAN ();
-	return 0;
+HUFFMAN ();//функция кодирования
+return 0;
 }
