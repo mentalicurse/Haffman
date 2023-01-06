@@ -34,14 +34,14 @@ Node *Unit (Node x)		//объединение узлов в один
 };
 
 //кодирование символов
-void CodingHuffman (Node * root, string code, unordered_map < string, string > *codetable)
+void CodingHaffman (Node * root, string code, unordered_map < string, string > *codetable)
 {
   if (root == nullptr)
     {
       return;
     }
-  if (root->left!=NULL) CodingHuffman (root->left, code + "0", codetable);
-  if (root->right!=NULL) CodingHuffman (root->right, code + "1", codetable);
+  if (root->left!=NULL) CodingHaffman (root->left, code + "0", codetable);
+  if (root->right!=NULL) CodingHaffman (root->right, code + "1", codetable);
 
    if (root->left==NULL && root->right==NULL)   (*codetable)[root->key] = code;
 }
@@ -59,7 +59,7 @@ Node *BuildTree (priority_queue < Node, vector < Node >, Node > htree)
   return new Node (htree.top ());
 }
 
-void HUFFMAN () //функция кодирования
+void HAFFMAN () //функция кодирования
 {
   long int *ABC = new long int[256];  //массив символов
   for (int i = 0; i < 256; i++)
@@ -100,7 +100,7 @@ cout<<"Частота:"<<endl;
 
   Node *Tree = BuildTree (htree); //построение дерева
   unordered_map < string, string > codetable;
-  CodingHuffman (Tree, "", &codetable);//символы и их кодировки
+  CodingHaffman (Tree, "", &codetable);//символы и их кодировки
 	
 unordered_map < string, string >::iterator it;
   cout << "Кодировка : " << endl;
@@ -205,14 +205,14 @@ unordered_map < string, string >::iterator it;
 	}
     }
 
-  fclose (input); //закрытие
-  fclose (output);//файлов	
+  fclose (input); 		//закрытие
+  fclose (output);		//файлов	
  
 }
 
 
 int main ()
 {
-HUFFMAN ();//функция кодирования
+HAFFMAN ();//функция кодирования
 return 0;
 }
