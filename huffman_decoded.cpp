@@ -10,7 +10,7 @@ using namespace std;
 class Node
 {
 	public:
-	std::string key;
+	string key;
 	 int freq;
 	 Node *left, *right;
 	 
@@ -18,7 +18,7 @@ class Node
   {
     return x.size >= y.size;
   }
-	Node (const std::string& str = "", int count = 0, Node * L = NULL, Node * R = NULL)
+	Node (const string& str = "", int count = 0, Node * L = NULL, Node * R = NULL)
   {
     key = str;
     freq = count;
@@ -31,3 +31,33 @@ class Node
     return new Node (x.key + key, x.freq + freq, new Node (x), this);
   }
 };
+
+Node *BuildTree (priority_queue < Node, vector < Node >, Node > htree)
+{
+  while (htree.size () > 1)
+    {
+      Node *t = new Node (htree.top ());
+      htree.pop ();
+      htree.push (*t->join (*new Node (htree.top ())));
+      htree.pop ();
+    }
+  return new Node (htree.top ());
+}
+
+void DecodingHuffman(){
+	int *ABC = new int[256];
+  for (int i = 0; i < 256; i++)
+    {
+      ABC[i] = 0;
+    }
+  FILE *input = fopen ("encoded.txt", "r");
+  if (input == nullptr)
+    {
+      cout<<"Файл не открывается.Исправьте ошибку!";
+	  exit(0);
+    }
+}
+
+int main(){
+	DecodingHuffman()
+}
