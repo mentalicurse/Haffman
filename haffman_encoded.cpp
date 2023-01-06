@@ -66,7 +66,7 @@ void HAFFMAN () //функция кодирования
     {
       ABC[i] = 0;
     }
-  FILE *input = fopen ("input.txt", "r");
+  FILE *input = fopen ("input.txt", "rb");
   if (input == nullptr)
     {
       cout<<"Файл не открывается.Исправьте ошибку!";
@@ -110,8 +110,8 @@ unordered_map < string, string >::iterator it;
     }
   c = 0;
   unsigned char k = 0;
-  FILE *output = fopen ("encoded.txt", "w+");
-  input = fopen ("input.txt", "r");
+  FILE *output = fopen ("encoded.txt", "wb +");
+  input = fopen ("input.txt", "rb");
 	
   unsigned int length = 0;
   unsigned char simvol = 0;
