@@ -7,18 +7,18 @@
 
 using namespace std;
 
-class Node
+class Node			//класс Узел
 {
 	public:
 	string key;
 	 int freq;
 	 Node *left, *right;
 	 
-	 bool operator () (const Node & x, const Node & y)
+	 bool operator () (const Node & x, const Node & y) //функция для упорядочения кучи
   {
-    return x.size >= y.size;
+    return x.freq >= y.freq;
   }
-	Node (const string& str = "", int count = 0, Node * L = NULL, Node * R = NULL)
+Node (const string& str = "", int count = 0, Node * L = NULL, Node * R = NULL) //построение Узла
   {
     key = str;
     freq = count;
@@ -26,26 +26,27 @@ class Node
     right = R;
   }
   
-  Node *join (Node x)
+Node *Unit (Node x) //объединение узлов
   {
     return new Node (x.key + key, x.freq + freq, new Node (x), this);
   }
 };
 
-Node *BuildTree (priority_queue < Node, vector < Node >, Node > htree)
+Node *BuildTree (priority_queue < Node, vector < Node >, Node > htree) //построение дерева
 {
   while (htree.size () > 1)
     {
       Node *t = new Node (htree.top ());
       htree.pop ();
-      htree.push (*t->join (*new Node (htree.top ())));
+      htree.push (*t->Unit (*new Node (htree.top ())));
       htree.pop ();
     }
   return new Node (htree.top ());
 }
 
-void DecodingHuffman(){
-  long int *ABC = new long int[256];
+void DecodingHaffman() 		//функция декоирования
+{
+  long int *ABC = new long int[256]; //массив символов и их частоты
   for (int i = 0; i < 256; i++)
     {
       ABC[i] = 0;
@@ -56,9 +57,9 @@ void DecodingHuffman(){
       cout<<"Файл не открывается.Исправьте ошибку!";
 	  exit(0);
     }
-	unsigned char count = 0;
     unsigned int count_simvol = 0;
-    count = fgetc(input);
+    unsigned char count = 0;
+    count = fgetc(input);//считываем количество символов
     if (!feof(input))
     {
        count_simvol =(unsigned int) count;
@@ -66,7 +67,7 @@ void DecodingHuffman(){
 
     unsigned char c = 0;
 
-    for (int i = 0; i < count_simvol; i++)
+    for (int i = 0; i < count_simvol; i++) //считываем символ и его частоту
     {
         c = fgetc(input);
         if (!feof(input))
@@ -81,7 +82,7 @@ void DecodingHuffman(){
     }
 
     priority_queue<Node, vector<Node>, Node> htree;
-    for (int i = 0; i < 256; i++)
+    for (int i = 0; i < 256; i++) //строим очередь
     {
         if (ABC[i] != 0)
         {
@@ -92,7 +93,7 @@ void DecodingHuffman(){
         }
     }
     c = 0;
-    Node *t = BuildTree(htree);
+    Node *t = BuildTree(htree); //строим дерево
 
     FILE* output = fopen("output.txt", "w+");
     Node *nodes = t;
@@ -103,32 +104,15 @@ void DecodingHuffman(){
         if (!feof(input))
         {
             for (int i = 7; i > -1; i--)
-            {
-                if (((c >> i) & 1) == 1) 
-                {
-                    if (nodes->right == NULL)
-                    {
-                        simvol = nodes->key[0];
-                        if (ABC[simvol] > 0)
-                        {
-                            ABC[simvol]--;
-                            fputc(simvol, output);
-                            nodes = t->right;
-                        }
-                    }
-                    else
-                    {
-                        nodes = nodes->right;
-                    }
-                }
-                else if (((c >> i) & 1) == 0)
+            { 
+		if (((c >> i) & 1) == 0) //проходимся по левым узлам
                 {
                     if (nodes->left == NULL)
                     {
                         simvol = nodes->key[0];
                         if (ABC[simvol] > 0)
                         {
-                            fputc(simvol, output);
+                            fputc(simvol, output);	//записываем символ
                             nodes = t->left;
                             ABC[simvol]--;
                         }
@@ -137,15 +121,32 @@ void DecodingHuffman(){
                     {
                         nodes = nodes->left;
                     }
+                } 
+                else if (((c >> i) & 1) == 1) //проходимся по правым узлам
+                {
+                    if (nodes->right == NULL)
+                    {
+                        simvol = nodes->key[0];
+                        if (ABC[simvol] > 0)
+                        {
+                            ABC[simvol]--;
+                            fputc(simvol, output);	//записываем символ
+                            nodes = t->right;
+                        }
+                    }
+                    else
+                    {
+                        nodes = nodes->right;
+                    }
                 }
             }
        }
     }
 
-    fclose(input);
-    fclose(output);
+    fclose(input);		//закрытие
+    fclose(output);		//файлов
 }
 
 int main(){
-	DecodingHuffman()
+	DecodingHaffman() //вызов функции декодирования
 }
