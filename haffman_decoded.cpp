@@ -51,7 +51,7 @@ void DecodingHaffman() 		//функция декоирования
     {
       ABC[i] = 0;
     }
-  FILE *input = fopen ("encoded.txt", "r");
+  FILE *input = fopen ("encoded.txt", "rb");
   if (input == nullptr)
     {
       cout<<"Файл не открывается.Исправьте ошибку!";
@@ -95,7 +95,7 @@ void DecodingHaffman() 		//функция декоирования
     c = 0;
     Node *t = BuildTree(htree); //строим дерево
 
-    FILE* output = fopen("output.txt", "w+");
+    FILE* output = fopen("output.txt", "wb +");
     Node *nodes = t;
     unsigned char simvol = 0;
     while (!feof(input))
