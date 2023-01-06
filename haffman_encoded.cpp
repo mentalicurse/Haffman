@@ -61,7 +61,7 @@ Node *BuildTree (priority_queue < Node, vector < Node >, Node > htree)
 
 void HUFFMAN () //функция кодирования
 {
-  int *ABC = new int[256];  //массив символов
+  long int *ABC = new long int[256];  //массив символов
   for (int i = 0; i < 256; i++)
     {
       ABC[i] = 0;
